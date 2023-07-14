@@ -1,4 +1,5 @@
 using Mopups.Interfaces;
+using Prism.Common;
 using Tonestro.Prism.Plugin.Mopups.Extensions;
 using Tonestro.Prism.Plugin.Mopups.Dialogs;
 using NavigationMode = Prism.Navigation.NavigationMode;
@@ -26,34 +27,34 @@ internal static class PopupUtilities
             return parameters;
         }
 
-        public static Page TopPage(IPopupNavigation popupNavigation, IWindowManager windowManager)
+        public static Page TopPage(IPopupNavigation popupNavigation, IPageAccessor pageAccessor)
         {
             Page page;
             var popupStack = popupNavigation.PopupStack.Where(x => !(x is PopupDialogContainer));
             var popupPages = popupStack.ToList();
             if (popupPages.Any())
                 page = popupPages.LastOrDefault();
-            else if (windowManager.Windows.Last().Page!.Navigation.ModalStack.Count > 0)
-                page = windowManager.Windows[^1].Page!.Navigation.ModalStack.LastOrDefault();
+            else if (pageAccessor.Page.Navigation.ModalStack.Count > 0)
+                page = pageAccessor.Page.Navigation.ModalStack.LastOrDefault();
             else
-                page =  windowManager.Windows[^1].Page!.Navigation.NavigationStack.LastOrDefault();
+                page =  pageAccessor.Page.Navigation.NavigationStack.LastOrDefault();
 
-            page ??= windowManager.Windows.Last().Page!;
+            page ??= pageAccessor.Page;
 
             return page.GetDisplayedPage();
         }
 
-        public static Page GetOnNavigatedToTarget(IPopupNavigation popupNavigation, IWindowManager windowManager)
+        public static Page GetOnNavigatedToTarget(IPopupNavigation popupNavigation, IPageAccessor pageAccessor)
         {
             Page page;
             if (popupNavigation.PopupStack.Count > 1)
                 page = popupNavigation.PopupStack.ElementAt(popupNavigation.PopupStack.Count() - 2);
-            else if (windowManager.Windows[^1].Page!.Navigation.ModalStack.Count > 0)
-                page = windowManager.Windows[^1].Page!.Navigation.ModalStack.LastOrDefault();
+            else if (pageAccessor.Page.Navigation.ModalStack.Count > 0)
+                page = pageAccessor.Page.Navigation.ModalStack.LastOrDefault();
             else
-                page = windowManager.Windows[^1].Page!.Navigation.NavigationStack.LastOrDefault();
+                page = pageAccessor.Page.Navigation.NavigationStack.LastOrDefault();
 
-            page ??= windowManager.Windows[^1].Page!;
+            page ??= pageAccessor.Page;
 
             return page.GetDisplayedPage();
         }

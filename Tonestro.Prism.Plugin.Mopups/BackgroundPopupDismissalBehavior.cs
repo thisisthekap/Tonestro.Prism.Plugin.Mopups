@@ -1,7 +1,7 @@
 using Mopups.Interfaces;
 using Mopups.Pages;
-using Prism;
 using Prism.Behaviors;
+using Prism.Common;
 using Tonestro.Prism.Plugin.Mopups.Extensions;
 
 namespace Tonestro.Prism.Plugin.Mopups;
@@ -9,17 +9,17 @@ namespace Tonestro.Prism.Plugin.Mopups;
 public class BackgroundPopupDismissalBehavior : BehaviorBase<PopupPage>
 {
     private IPopupNavigation PopupNavigation { get; }
-    private IWindowManager WindowManager { get; }
+    private IPageAccessor PageAccessor { get; }
 
     /// <summary>
     /// Creates a new instance of the <see cref="BackgroundPopupDismissalBehavior"/>
     /// </summary>
     /// <param name="popupNavigation">The <see cref="IPopupNavigation"/> instance.</param>
-    /// <param name="windowManager">The <see cref="IWindowManager"/> instance.</param>
-    public BackgroundPopupDismissalBehavior(IPopupNavigation popupNavigation, IWindowManager windowManager)
+    /// <param name="pageAccessor">The <see cref="IPageAccessor"/> instance.</param>
+    public BackgroundPopupDismissalBehavior(IPopupNavigation popupNavigation, IPageAccessor pageAccessor)
     {
         PopupNavigation = popupNavigation;
-        WindowManager = windowManager;
+        PageAccessor = pageAccessor;
     }
 
     /// <inheritdoc />
@@ -67,12 +67,12 @@ public class BackgroundPopupDismissalBehavior : BehaviorBase<PopupPage>
         Page page;
         if (PopupNavigation.PopupStack.Any(p => p != AssociatedObject))
             page = PopupNavigation.PopupStack.LastOrDefault(p => p != AssociatedObject);
-        else if (WindowManager.Windows[^1].Page!.Navigation.ModalStack.Count > 0)
-            page = WindowManager.Windows[^1].Page!.Navigation.ModalStack.LastOrDefault();
+        else if (PageAccessor.Page.Navigation.ModalStack.Count > 0)
+            page = PageAccessor.Page.Navigation.ModalStack.LastOrDefault();
         else
-            page = WindowManager.Windows[^1].Page!.Navigation.NavigationStack.LastOrDefault();
+            page = PageAccessor.Page.Navigation.NavigationStack.LastOrDefault();
 
-        page ??= WindowManager.Windows[^1].Page!;
+        page ??= PageAccessor.Page;
 
         return page.GetDisplayedPage();
     }

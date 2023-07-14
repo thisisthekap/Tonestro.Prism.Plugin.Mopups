@@ -1,5 +1,5 @@
 using Mopups.Interfaces;
-using Prism;
+using Prism.Common;
 
 namespace Tonestro.Prism.Plugin.Mopups;
 
@@ -14,8 +14,8 @@ public static class ApplicationLifecycleExtensions
     /// <remarks>
     /// Do not invoke <c>base.OnResume()</c>.
     /// </remarks>
-    /// <param name="app">The <see cref="PrismApplication" /></param>
-    public static void PopupPluginOnResume(this IWindowManager app)
+    /// <param name="app">The <see cref="IPageAccessor" /></param>
+    public static void PopupPluginOnResume(this IPageAccessor app)
     {
         InvokeLifecyleEvent(app, x => x.OnResume());
     }
@@ -26,21 +26,18 @@ public static class ApplicationLifecycleExtensions
     /// <remarks>
     /// Do not invoke <c>base.OnResume()</c>.
     /// </remarks>
-    /// <param name="app">The <see cref="PrismApplication" /></param>
-    public static void PopupPluginOnSleep(this PrismApplication app)
+    /// <param name="pageAccessor">The <see cref="IPageAccessor" /></param>
+    public static void PopupPluginOnSleep(this IPageAccessor pageAccessor)
     {
-        InvokeLifecyleEvent(app, x => x.OnSleep());
+        InvokeLifecyleEvent(pageAccessor, x => x.OnSleep());
     }
 
-    private static void InvokeLifecyleEvent(IWindowManager app, Action<IApplicationLifecycleAware> action)
+    private static void InvokeLifecyleEvent(IPageAccessor pageAccessor, Action<IApplicationLifecycleAware> action)
     {
-        if (app.Windows.Last().Page != null)
-        {
-            var popupNavigation = ContainerLocator.Container.Resolve<IPopupNavigation>();
-            var appProvider = ContainerLocator.Container.Resolve<IWindowManager>();
+        if (pageAccessor.Page == null) return;
+        var popupNavigation = ContainerLocator.Container.Resolve<IPopupNavigation>();
 
-            var page = PopupUtilities.TopPage(popupNavigation, appProvider);
-            PageUtilities.InvokeViewAndViewModelAction(page, action);
-        }
+        var page = PopupUtilities.TopPage(popupNavigation, pageAccessor);
+        PageUtilities.InvokeViewAndViewModelAction(page, action);
     }
 }
