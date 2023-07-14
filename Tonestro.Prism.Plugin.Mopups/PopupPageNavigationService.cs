@@ -10,8 +10,6 @@ namespace Tonestro.Prism.Plugin.Mopups;
 /// </summary>
 public class PopupPageNavigationService : PageNavigationService
 {
-    private readonly IPageAccessor _pageAccessor;
-
     /// <summary>
     /// Gets the <see cref="IPopupNavigation" /> service.
     /// </summary>
@@ -22,16 +20,14 @@ public class PopupPageNavigationService : PageNavigationService
     /// </summary>
     /// <param name="popupNavigation"></param>
     /// <param name="container"></param>
-    /// <param name="windowManager"></param>
+    /// <param name="application"></param>
     /// <param name="eventAggregator"></param>
     /// <param name="pageAccessor"></param>
     public PopupPageNavigationService(IPopupNavigation popupNavigation, IContainerProvider container,
-        IWindowManager windowManager, IEventAggregator eventAggregator, IPageAccessor pageAccessor)
-        : base(container, windowManager, eventAggregator, pageAccessor)
+        IApplication application, IEventAggregator eventAggregator, IPageAccessor pageAccessor)
+        : base(container, application, eventAggregator, pageAccessor)
     {
         PopupNavigation = popupNavigation;
-        // _page = windowManager.Windows[^1].Page;
-        _pageAccessor = pageAccessor;
     }
 
     /// <inheritdoc />
@@ -41,12 +37,12 @@ public class PopupPageNavigationService : PageNavigationService
         parameters.TryGetValue(KnownNavigationParameters.Animated, out bool? animated);
         try
         {
-            switch (PopupUtilities.TopPage(PopupNavigation, _windowManager))
+            switch (PopupUtilities.TopPage(PopupNavigation, _pageAccessor))
             {
                 case PopupPage popupPage:
                     var segmentParameters = UriParsingHelper.GetSegmentParameters(null, parameters);
                     ((INavigationParametersInternal)segmentParameters).Add("__NavigationMode", NavigationMode.Back);
-                    var previousPage = PopupUtilities.GetOnNavigatedToTarget(PopupNavigation, _windowManager);
+                    var previousPage = PopupUtilities.GetOnNavigatedToTarget(PopupNavigation, _pageAccessor);
 
                     await DoPop(popupPage.Navigation, false, animated ?? false);
 
@@ -94,7 +90,7 @@ public class PopupPageNavigationService : PageNavigationService
         switch (page)
         {
             case PopupPage popup:
-                if (_windowManager.Windows[^1].Page is null)
+                if (_pageAccessor.Page is null)
                 {
                     throw new PopupNavigationException(popup);
                 }
@@ -112,7 +108,7 @@ public class PopupPageNavigationService : PageNavigationService
 
                 if (currentPage is PopupPage)
                 {
-                    currentPage = PageUtilities.GetCurrentPage(_windowManager.Windows[^1].Page);
+                    currentPage = PageUtilities.GetCurrentPage(_pageAccessor.Page);
                 }
 
                 await base.DoPush(currentPage, page, useModalNavigation, animated, insertBeforeLast, navigationOffset);

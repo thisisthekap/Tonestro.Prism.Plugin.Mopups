@@ -18,7 +18,7 @@
     <PropertyGroup>
         <IsPackable>true</IsPackable>
         <PackageId>Tonestro.Prism.Plugin.Mopups</PackageId>
-        <Version>9.0.175.1</Version>
+        <Version>8.1273.1</Version>
         <Description>Popup extensions for mopups and prism</Description>
         <Authors>Albilaga</Authors>
         <Company>fun.music IT GmbH</Company>
@@ -27,8 +27,7 @@
 
     <ItemGroup>
         <PackageReference Include="Mopups" Version="1.1.1"/>
-        <PackageReference Include="Prism.DryIoc.Maui" Version="9.0.175-pre"/>
-
+        <PackageReference Include="Prism.DryIoc.Maui" Version="8.1.273-pre" />
     </ItemGroup>
 
 

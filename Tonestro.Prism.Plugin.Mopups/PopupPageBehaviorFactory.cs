@@ -1,7 +1,7 @@
 using Mopups.Interfaces;
 using Mopups.Pages;
-using Prism;
 using Prism.Behaviors;
+using Prism.Common;
 
 namespace Tonestro.Prism.Plugin.Mopups;
 
@@ -12,17 +12,17 @@ namespace Tonestro.Prism.Plugin.Mopups;
 public class PopupPageBehaviorFactory : IPageBehaviorFactory
 {
     IPopupNavigation PopupNavigation { get; }
-    IWindowManager ApplicationProvider { get; }
+    IPageAccessor PageAccessor { get; }
 
     /// <summary>
     /// Creates a new <see cref="IPageBehaviorFactory" /> for use with <see cref="PopupPage" />.
     /// </summary>
     /// <param name="popupNavigation">The <see cref="IPopupNavigation" /> service.</param>
-    /// <param name="applicationProvider">The <see cref="PrismApplication" />.</param>
-    public PopupPageBehaviorFactory(IPopupNavigation popupNavigation, IWindowManager applicationProvider)
+    /// <param name="pageAccessor">The <see cref="IPageAccessor" />.</param>
+    public PopupPageBehaviorFactory(IPopupNavigation popupNavigation, IPageAccessor pageAccessor)
     {
         PopupNavigation = popupNavigation;
-        ApplicationProvider = applicationProvider;
+        PageAccessor = pageAccessor;
     }
 
     /// <inheritdoc />
@@ -30,7 +30,7 @@ public class PopupPageBehaviorFactory : IPageBehaviorFactory
     {
         if (page is PopupPage popupPage)
         {
-            popupPage.Behaviors.Add(new BackgroundPopupDismissalBehavior(PopupNavigation, ApplicationProvider));
+            popupPage.Behaviors.Add(new BackgroundPopupDismissalBehavior(PopupNavigation, PageAccessor));
         }
     }
 }
