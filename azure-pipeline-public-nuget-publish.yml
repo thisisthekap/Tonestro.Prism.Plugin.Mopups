@@ -1,0 +1,55 @@
+trigger:
+  branches:
+    include:
+      - refs/tags/release-v*
+
+pr: none
+
+pool:
+  vmImage: 'macOS-13'
+
+variables:
+  - group: nuget.org
+
+steps:
+
+- bash: |
+    echo "##vso[task.setvariable variable=bindingsVersion]$(cat Tonestro.Prism.Plugin.Mopups/Tonestro.Prism.Plugin.Mopups.csproj | grep '<Version>' | awk -F '[<>]' '{print $3}')"
+
+- bash: |
+    echo "##vso[build.updatebuildnumber]production-tonestro-prism-plugin-mopups-$(Build.SourceBranchName)-$(Build.BuildId)"
+
+- bash: |
+    if [[ "$(Build.SourceBranchName)" != *"$(bindingsVersion)" ]]; then
+      echo "mismatch between tag $(Build.SourceBranchName) and nuget version $(bindingsVersion)"
+      exit 1
+    fi
+
+- bash: |
+    cd Tonestro.Prism.Plugin.Mopups
+    sudo dotnet workload restore
+    dotnet restore
+    dotnet build --configuration Release
+    dotnet pack --configuration Release
+  displayName: "Tonestro.Prism.Plugin.Mopups: Build Release Nuget"
+
+- bash: |
+    ./copy-nugets.sh
+  displayName: "Copy nugets to nugetoutput folder"
+
+- bash: |
+    dotnet nuget push nugetoutput/Tonestro.Prism.Plugin.Mopups.$(bindingsVersion).nupkg -k "$(nugetOrgApiKey)" -s https://api.nuget.org/v3/index.json
+  displayName: "Publish nuget packages to nuget.org"
+
+- task: GitHubRelease@1
+  inputs:
+    gitHubConnection: 'github.com_thisisthekap'
+    repositoryName: 'thisisthekap/Tonestro.Prism.Plugin.Mopups'
+    action: 'create'
+    target: '$(Build.SourceVersion)'
+    tagSource: 'userSpecifiedTag'
+    tag: '$(Build.SourceBranchName)'
+    title: 'Tonestro.Prism.Plugin.Mopups $(bindingsVersion)'
+    assets: 'nugetoutput/Tonestro.Prism.Plugin.Mopups.*.nupkg'
+    changeLogCompareToRelease: 'lastFullRelease'
+    changeLogType: 'issueBased'

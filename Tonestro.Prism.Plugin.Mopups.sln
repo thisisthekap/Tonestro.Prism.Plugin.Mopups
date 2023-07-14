@@ -6,6 +6,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 	ProjectSection(SolutionItems) = preProject
 		NuGet.Config = NuGet.Config
 		README.md = README.md
+		azure-pipeline-public-nuget-publish.yml = azure-pipeline-public-nuget-publish.yml
+		azure-pipeline-pullrequests.yml = azure-pipeline-pullrequests.yml
+		copy-nugets.sh = copy-nugets.sh
+		projects.txt = projects.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tonestro.Prism.Plugin.Mopups.Samples", "Tonestro.Prism.Plugin.Mopups.Samples\Tonestro.Prism.Plugin.Mopups.Samples.csproj", "{F62AFD30-D036-48BE-81D2-E402FD4050CD}"

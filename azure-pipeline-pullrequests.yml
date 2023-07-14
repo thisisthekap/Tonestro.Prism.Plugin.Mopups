@@ -1,0 +1,29 @@
+pr:
+  - main
+
+pool:
+  vmImage: 'macOS-13'
+
+steps:
+
+- bash: |
+    echo "##vso[build.updatebuildnumber]pullrequests-tonestro-prism-plugin-mopups-$(Build.SourceBranchName)-$(Build.BuildId)"
+  displayName: Set Build Number
+
+- bash: |
+    cd Tonestro.Prism.Plugin.Mopups
+    sudo dotnet workload restore
+    dotnet restore
+    dotnet build --configuration Release
+    dotnet pack --configuration Release
+  displayName: "Tonestro.Prism.Plugin.Mopups: Build Release Nuget"
+
+- bash: |
+    sudo dotnet workload restore
+    dotnet restore
+  displayName: Restore Solution
+
+- bash: |
+    cd Tonestro.Prism.Plugin.Mopups.Samples
+    dotnet publish -f net7.0-android -c Release -p:AndroidPackageFormats=apk -p:AndroidKeyStore=true -p:AndroidSigningKeyStore=usagechecker.jks -p:AndroidSigningKeyAlias=usagechecker -p:AndroidSigningKeyPass=usagechecker -p:AndroidSigningStorePass=usagechecker
+  displayName: Build UsageChecker
