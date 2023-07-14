@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tonestro.Prism.Plugin.Mopups", "Tonestro.Prism.Plugin.Mopups\Tonestro.Prism.Plugin.Mopups.csproj", "{93AE1E46-A4D9-4B1B-BD17-41A78598FC4E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{3CF46C26-86C7-46A0-A8FC-5AAE68960825}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet.Config = NuGet.Config
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tonestro.Prism.Plugin.Mopups.Samples", "Tonestro.Prism.Plugin.Mopups.Samples\Tonestro.Prism.Plugin.Mopups.Samples.csproj", "{F62AFD30-D036-48BE-81D2-E402FD4050CD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{93AE1E46-A4D9-4B1B-BD17-41A78598FC4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93AE1E46-A4D9-4B1B-BD17-41A78598FC4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93AE1E46-A4D9-4B1B-BD17-41A78598FC4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93AE1E46-A4D9-4B1B-BD17-41A78598FC4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F62AFD30-D036-48BE-81D2-E402FD4050CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F62AFD30-D036-48BE-81D2-E402FD4050CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F62AFD30-D036-48BE-81D2-E402FD4050CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F62AFD30-D036-48BE-81D2-E402FD4050CD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
+EndGlobal

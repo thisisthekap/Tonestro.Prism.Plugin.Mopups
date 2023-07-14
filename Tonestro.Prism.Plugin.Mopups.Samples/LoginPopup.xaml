@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<pages:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:pages="clr-namespace:Mopups.Pages;assembly=Mopups"
+                 xmlns:samples="clr-namespace:Tonestro.Prism.Plugin.Mopups.Samples"
+                 x:Class="Tonestro.Prism.Plugin.Mopups.Samples.LoginPopup"
+                 BackgroundColor="#80000000"
+                 x:DataType="samples:LoginPopupViewModel"
+                 BackgroundClickedCommand="{Binding CloseCommand}">
+    <VerticalStackLayout BackgroundColor="White" Spacing="8" HorizontalOptions="Center" WidthRequest="300"
+                         VerticalOptions="Center" Padding="20">
+        <Entry Text="{Binding Username}" Placeholder="Username" />
+        <Entry Text="{Binding Password}" Placeholder="Password" IsPassword="True" />
+        <Button Margin="0,16,0,0" HorizontalOptions="Center" Text="Log In"
+                Command="{Binding LoginCommand,Mode=OneTime}" />
+        <Button Margin="0,0,0,16" HorizontalOptions="Center" Text="Close" Command="{Binding CloseCommand,Mode=OneTime}" />
+    </VerticalStackLayout>
+</pages:PopupPage>
